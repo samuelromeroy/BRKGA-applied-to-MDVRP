@@ -1,0 +1,112 @@
+{
+    "pr01.txt": {
+        "best_distances": [
+            967.5057539621339
+        ],
+        "avg_distance": 967.5057539621339,
+        "std_distance": 0.0,
+        "execution_times": [
+            176.07214856147766
+        ],
+        "best_solution_distance": 967.5057539621339
+    },
+    "pr02.txt": {
+        "best_distances": [
+            2348.4516397994207
+        ],
+        "avg_distance": 2348.4516397994207,
+        "std_distance": 0.0,
+        "execution_times": [
+            186.50170850753784
+        ],
+        "best_solution_distance": 2348.4516397994207
+    },
+    "pr03.txt": {
+        "best_distances": [
+            4488.493643598935
+        ],
+        "avg_distance": 4488.493643598935,
+        "std_distance": 0.0,
+        "execution_times": [
+            316.9728493690491
+        ],
+        "best_solution_distance": 4488.493643598935
+    },
+    "pr04.txt": {
+        "best_distances": [
+            10324.554080325632
+        ],
+        "avg_distance": 10324.554080325632,
+        "std_distance": 0.0,
+        "execution_times": [
+            505.9332318305969
+        ],
+        "best_solution_distance": 10324.554080325632
+    },
+    "pr05.txt": {
+        "best_distances": [
+            7718.672817951376
+        ],
+        "avg_distance": 7718.672817951376,
+        "std_distance": 0.0,
+        "execution_times": [
+            887.9982903003693
+        ],
+        "best_solution_distance": 7718.672817951376
+    },
+    "pr06.txt": {
+        "best_distances": [
+            9965.181884804964
+        ],
+        "avg_distance": 9965.181884804964,
+        "std_distance": 0.0,
+        "execution_times": [
+            1149.911943435669
+        ],
+        "best_solution_distance": 9965.181884804964
+    },
+    "pr07.txt": {
+        "best_distances": [
+            1524.9308522688161
+        ],
+        "avg_distance": 1524.9308522688161,
+        "std_distance": 0.0,
+        "execution_times": [
+            143.56117582321167
+        ],
+        "best_solution_distance": 1524.9308522688161
+    },
+    "pr08.txt": {
+        "best_distances": [
+            4450.25923099507
+        ],
+        "avg_distance": 4450.25923099507,
+        "std_distance": 0.0,
+        "execution_times": [
+            370.183402299881
+        ],
+        "best_solution_distance": 4450.25923099507
+    },
+    "pr09.txt": {
+        "best_distances": [
+            10372.96344274842
+        ],
+        "avg_distance": 10372.96344274842,
+        "std_distance": 0.0,
+        "execution_times": [
+            469.10215640068054
+        ],
+        "best_solution_distance": 10372.96344274842
+    },
+    "pr10.txt": {
+        "best_distances": [
+            11431.015464719574
+        ],
+        "avg_distance": 11431.015464719574,
+        "std_distance": 0.0,
+        "execution_times": [
+            790.8963162899017
+        ],
+        "best_solution_distance": 11431.015464719574
+    }
+}

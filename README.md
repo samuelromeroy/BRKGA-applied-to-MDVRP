@@ -6,11 +6,36 @@ Este proyecto implementa un algoritmo BRKGA (Biased Random-Key Genetic Algorithm
 
 ## Características principales
 
-1. **Parser MDVRP**: Carga y procesa archivos de instancias en formato estándar
-2. **Algoritmo BRKGA**: Implementación completa con operadores genéticos especializados
-3. **Visualización**: Herramientas gráficas para analizar soluciones
-4. **Validación**: Verificación automática de factibilidad de soluciones
+- Parser para archivos de instancia MDVRP. 
+- Funciones para visualización de la instancia y solucionador.
+- Algoritmo de optimización BRKGA. 
+- Sistema de validación de soluciones.
+- Grid search de hiperparámetros. 
+- Ejecución batch en múltiples instancias
 
+## Estructura de la instancia 
+
+Línea 1: 
+<problem_type> <num_vehicles> <num_customers> <num_depots>
+
+Líneas 2-(num_depots+1): 
+<max_duration> <max_load> (Especificaciones por vehículo)
+
+Líneas restantes (clientes):
+<id> <x> <y> <service_duration> <demand> <frequency> <num_visit_combinations>
+<visit_combinations> [time_window_start] [time_window_end]
+
+Ejemplo detallado:
+1 4 50 4       # Problema tipo 1, 4 vehículos, 50 clientes, 4 depósitos
+200 100        # Vehículo 1: Duración máxima 200, Carga 100
+...            # (3 líneas más de especificaciones de vehículos)
+5 12 45 30 15 2 3 1 4 2 0 50  # Cliente ID 5 en (12,45), servicio 30u.t., demanda 15
+...
+
+Características especiales:
+- Los depósitos se identifican por demanda=0 y frecuencia=0
+- Las ventanas de tiempo son opcionales
+  
 ## Requisitos del sistema
 
 - Python 3.8 o superior
@@ -19,100 +44,108 @@ Este proyecto implementa un algoritmo BRKGA (Biased Random-Key Genetic Algorithm
   - matplotlib >= 3.4.0
   - scipy >= 1.7.0
 
-## Estructura del código
+## Componentes principales del código 
 
-El proyecto puede ejecutarse de dos formas:
+Parser MDVRP (parse_mdvrp_file)
+-----------------------------------
+Función: Convierte archivos .txt en estructura de datos Python
+Entrada: Ruta de archivo .txt
+Salida: Diccionario estructurado con:
+- Metadatos del problema
+- Lista de depósitos con coordenadas
+- Lista de clientes con 15 atributos detallados
+- Especificaciones técnicas de vehículos
 
-1. **Como Jupyter Notebook**:
-   - Contiene celdas ejecutables paso a paso
-   - Ideal para experimentación y análisis
-   - Incluye visualizaciones interactivas
+Sistema de Visualización
+----------------------------
+Funciones principales:
+- plot_mdvrp_instance: Mapa 2D con:
+  * Depósitos como cuadrados rojos
+  * Clientes escalados por demanda
+  * Etiquetas de ventanas de tiempo
+  * Sistema de coordenadas ajustable
 
-2. **Como script Python**:
-   - Ejecución directa desde terminal
-   - Opciones configurables por parámetros
-   - Genera reportes en formato texto
+- visualize_routes: Visualización avanzada de soluciones:
+  * Rutas multicolor con números de orden
+  * Información flotante por ruta
+  * Leyenda interactiva
+  * Resumen de métricas globales
 
-## Funciones
+Implementación BRKGA (BRKGA_MDVRP)
+---------------------------------------
+Clase principal con métodos:
+- Constructor: Configura parámetros del algoritmo
+- decode: Transforma cromosomas en rutas válidas
+- fitness: Función de evaluación con penalizaciones
+- evolve: Mecanismo de evolución generacional
+- solve: Loop principal de optimización
 
-### Procesamiento de datos
-- parse_mdvrp_file(): Carga y estructura datos de instancias MDVRP
-- calculate_route_distance(): Calcula distancias euclidianas para rutas
+Parámetros clave del algoritmo:
+- Tamaño poblacional: 100-2000 individuos
+- Porcentaje de élite: 10-40%
+- Tasa de mutación: 5-20%
+- Generaciones: 50-1000 iteraciones
 
-### Algoritmo BRKGA
-- Clase BRKGA_MDVRP: Implementa el algoritmo evolutivo completo
-  - initialize_population(): Crea población inicial
-  - decode(): Transforma cromosomas en soluciones
-  - fitness(): Evalúa calidad de soluciones
-  - crossover(): Operador de recombinación
-  - evolve(): Genera nueva población
-  - solve(): Ejecuta el proceso evolutivo
+Validador de Soluciones (debug_solution)
+--------------------------------------------
+Sistema de verificación que chequea:
+- Cumplimiento de capacidades vehiculares
+- Respeto de ventanas de tiempo
+- Cobertura completa de clientes
+- Uso correcto de depósitos
+- Consistencia de datos
 
-### Visualización
-- plot_mdvrp_instance(): Muestra distribución geográfica de clientes/depósitos
-- visualize_routes(): Dibuja rutas de solución con información detallada
-- Gráficos de convergencia: Muestran mejora del fitness por generación
+Salida detallada:
+- Reporte por ruta con métricas
+- Detección de violaciones específicas
+- Resumen general de validez
 
-### Validación
-- debug_solution(): Verifica restricciones y detecta violaciones
-- chromosome_to_solution(): Convierte cromosomas a estructura legible
+## Uso básico
+--------------------------------------------------------------------------------
+Ejemplo mínimo funcional:
 
-## Ejecución del proyecto
+# Carga de datos
+from mdvrp_solver import parse_mdvrp_file, BRKGA_MDVRP, visualize_routes
 
-Para usar el Jupyter Notebook:
-1. Instalar Jupyter: pip install notebook
-2. Ejecutar: jupyter notebook BRKGA_MDVRP.ipynb
-3. Ejecutar celdas en orden
+data = parse_mdvrp_file('p01.txt')
 
-Para ejecutar como script:
-1. Guardar código como BRKGA_MDVRP.py
-2. Ejecutar: python BRKGA_MDVRP.py instancia.txt
-3. Parámetros opcionales:
-   - --popsize: Tamaño de población (default 100)
-   - --generations: Número de generaciones (default 50)
-   - --elite: Porcentaje élite (default 0.2)
+# Configuración del solver
+solver = BRKGA_MDVRP(
+    data,
+    population_size=1000,
+    elite_percent=0.2,
+    mutants_percent=0.1
+)
 
-## Formatos de entrada/salida
+# Optimización
+solution, distance, history = solver.solve(generations=100)
 
-Entrada:
-- Archivos .txt en formato MDVRP estándar
-- Primera línea: tipo_problema num_vehiculos num_clientes num_depositos
-- Líneas siguientes: especificaciones de vehículos y clientes
+# Visualización
+visualize_routes(data, solution)
 
-Salida:
-- Soluciones como listas de rutas con métricas asociadas
-- Gráficos de convergencia y visualización geográfica
-- Reportes de validación en consola
+# Validación
+debug_solution(data, solution, verbose=True)
 
-## Personalización
+## Ajuste de hiperparametros 
+--------------------------------------------------------------------------------
+Sistema incluido para búsqueda de parámetros:
+- Búsqueda grid 
+- Comparación de convergencias
 
-Los parámetros clave del algoritmo son ajustables:
-- Tamaño de población
-- Porcentajes de élite/mutantes
-- Probabilidad de sesgo en cruce
-- Criterios de terminación
-- Funciones de penalización
+## Ejecución en múltiples instancias 
+--------------------------------------------------------------------------------
+Función incluida para procesamiento batch:
+- Procesa secuencialmente p01.txt a p23.txt
+- Genera reporte consolidado en .txt
+- Formato de salida:
+  
+  Instancia  | Depósitos | Clientes | Vehículos | Tiempo(s) | Distancia Total
+  --------------------------------------------------------------------------
+  p01.txt    |     4     |    50    |     4     |  152.34   |    1256.78
 
-## Limitaciones conocidas
 
-- Diseñado para instancias pequeñas/medianas
-- Distancias euclidianas (no incluye matriz de distancias precalculada)
-- Ventanas de tiempo implementadas pero no utilizadas en fitness básico
 
-## Referencias 
 
-[1] Christofides, N., Eilon, S.: An algorithm for the vehicle-dispatching problem. Oper. Res. Q. 20(3), 309–318 (1969).
 
-[2] Gillett, B., Johnson, J.: Multi-terminal vehicle-dispatch algorithm. Omega 4(6), 711–718 (1976).
 
-[3] Chao, I., Golden, B., Wasil, E.: A new heuristic for the multi-depot vehicle routing problem that improves upon best-known solutions. Am. J. Math. Manag.Sci. 13(3), 371–406 (1993).
 
-[4] Cordeau, J., Gendreau, M., Laporte, G.: A tabu search heuristic for periodic and multi-depot vehicle routing problems. Networks 30(2), 105–119 (1997).
-
-[5] Cordeau, J., Maischberger, M.: A parallel iterated tabu search heuristic for vehicle routing problems. Comput. Oper. Res. 39(9), 2033–2050 (2012)
-
-[6] Subramanian, A., Uchoa, E., Ochi, L.S.: A hybrid algorithm for a class of vehicle routing problems. Comput. Oper. Res. 40(10), 2519–2531 (2013)
-
-[7] Vidal, T., Crainic, T., Gendreau, M., Lahrichi, N., Rei, W.: A hybrid genetic algorithm for multi-depot and periodic vehicle routing problems. Oper. Res. 60(3), 611–624 (2012).
-
-[8] Escobar, J. W., Linfati, R., Toth, P., & Baldoquin, M. G. (2014). A hybrid granular tabu search algorithm for the multi-depot vehicle routing problem. Journal of Heuristics, 20(5), 483-509.

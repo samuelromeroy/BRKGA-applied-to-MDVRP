@@ -1,140 +1,76 @@
-# 🚚 MDVRP Solver con BRKGA ![Python](https://img.shields.io/badge/Python-3.7%2B-blue) [![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# BRKGA para MDVRP
 
-![Visualización de Rutas MDVRP](docs/route_visualization.png)
+## 📌 Descripción del Proyecto
 
-## 📦 Tabla de Contenidos
-1. [Descripción del Proyecto](#-descripción-del-proyecto)  
-2. [Características Clave](#-características-clave)  
-3. [Instalación](#-instalación)  
-4. [Uso Rápido](#-uso-rápido)  
-5. [Estructura del Proyecto](#-estructura-del-proyecto)  
-6. [Configuración Avanzada](#-configuración-avanzada)  
-7. [Hiperparámetros](#-hiperparámetros)  
-8. [Validación](#-validación)  
-9. [Resultados](#-resultados)  
+Este proyecto implementa una variante del algoritmo BRKGA (Biased Random-Key Genetic Algorithm) para resolver el problema del Enrutamiento de Vehículos con Múltiples Depósitos (MDVRP). El MDVRP es una extensión del VRP clásico en el que varios depósitos pueden despachar vehículos para satisfacer la demanda de clientes, respetando restricciones de capacidad y duración.
 
-<a name="descripción"></a>
-## Descripción del Proyecto
+## ✨ Características Clave
 
-Solución evolutiva para el **Problema de Ruteo de Vehículos con Múltiples Depósitos** que combina:
-- Algoritmo Genético con Claves Aleatorias Sesgadas (BRKGA)
-- Sistema de visualización 
-- Parser para instancias MDVRP
-- Módulo de validación
-- Búsqueda de hipérparametros
+- Lectura estructurada de instancias MDVRP desde archivos de texto.
+- Visualización de clientes y depósitos con información opcional sobre demanda y ventanas de tiempo.
+- Aplicación de un algoritmo basado en representación de claves aleatorias para buscar soluciones factibles.
 
-## Instalación 
+## ⚙️ Instalación
 
-git clone [https://github.com/tu_usuario/mdvrp-solver.git](https://github.com/samuelromeroy/BRKGA-applied-to-MDVRP/edit/main/README.md)
-cd mdvrp-solver 
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/samuelromeroy/BRKGA-applied-to-MDVRP
+   ```
 
-Dependencias: 
+2. Instala las dependencias necesarias:
+   ```bash
+   pip install numpy matplotlib
+   ```
 
-NumPy	1.21+
-Matplotlib	3.5+	
+## 🚀 Uso Rápido
 
-## Uso Rápido 
+1. Coloca el archivo de instancia (`.txt`) en el directorio raíz.
+2. Ejecuta el notebook `BRKGA.ipynb`.
+3. Ajusta el parámetro `file_path` con el nombre de tu archivo de instancia.
+4. Corre las celdas para cargar datos, visualizar la instancia y ejecutar el algoritmo.
 
-from mdvrp_solver import (
-    parse_mdvrp_file,
-    BRKGA_MDVRP,
-    visualize_routes,
-    debug_solution
-)
+## 🧱 Estructura del Proyecto
 
-# 1. Cargar instancia
-data = parse_mdvrp_file('instances/p01.txt')
+```
+.
+├── BRKGA.ipynb              # Notebook principal con implementación y visualización
+├── data/                    # (Opcional) Carpeta para almacenar archivos de instancia
+├── README.md                # Este archivo
+└── requirements.txt         # Lista de dependencias
+```
 
-# 2. Configurar algoritmo
-solver = BRKGA_MDVRP(
-    data,
-    population_size=1500,
-    elite_percent=0.3,
-    mutants_percent=0.1,
-    p_bias=0.7
-)
+## 🛠️ Configuración Avanzada
 
-# 3. Ejecutar optimización
-solution, distance, history = solver.solve(
-    generations=500,
-    verbose=True
-)
+Puedes modificar el comportamiento del algoritmo ajustando:
+- Tamaño de población
+- Porcentaje de élite y mutantes
+- Criterios de parada
+- Métricas de evaluación
 
-# 4. Visualizar resultados
-visualize_routes(
-    data, 
-    solution,
-    show_demand=True,
-    save_path='results/p01_solution.png'
-)
+Estas configuraciones se encuentran en el cuerpo del notebook.
 
-# 5. Validar solución
-is_valid, violations = debug_solution(data, solution)
+## ⚙️ Hiperparámetros
 
-## Estructura del proyecto 
+Los principales hiperparámetros del BRKGA incluyen:
+- `population_size`: tamaño de la población
+- `elite_fraction`: fracción de la población considerada élite
+- `mutant_fraction`: fracción de mutantes por generación
+- `inheritance_prob`: probabilidad de herencia del padre élite
+- `max_generations`: número máximo de generaciones
 
-mdvrp-solver/
-├── instances/          # Archivos de entrada (.txt)
-├── src/                # Código fuente
-│   ├── core/           # Lógica principal
-│   ├── utils/          # Herramientas auxiliares
-│   └── visualization/  # Módulos gráficos
-├── results/            # Salidas generadas
-│   ├── convergence/    # Gráficas de convergencia
-│   └── solutions/      # Archivos de solución
-├── experiments/        # Scripts de experimentación
-├── docs/               # Documentación técnica
-└── tests/              # Casos de prueba
+## ✅ Validación
 
-## Configuración avanzada
+El algoritmo se valida gráficamente mediante visualización de los clientes y rutas, y cuantitativamente a través del valor de la función objetivo. También se puede comparar el desempeño en diferentes instancias.
 
-brkga:
-  population_size: 1200
-  elite_percent: 0.25
-  mutants_percent: 0.15
-  p_bias: 0.65
-  
-visualization:
-  node_size: 150
-  route_width: 2.5
-  show_time_windows: true
-  
-output:
-  save_plots: true
-  plot_format: png
-  report_format: txt
+## 📊 Resultados
 
-  ## Hipérparametros 
-  
-Parámetro	Valor Óptimo	Rango Recomendado	Efecto Principal
-Tamaño Población	1500	500-2000	Diversidad genética
-Porcentaje Élite	30%	20%-40%	Explotación de soluciones
-Tasa de Mutación	10%	5%-15%	Exploración del espacio
-Generaciones	500	100-1000	Balance tiempo-calidad
-p_bias	0.7	0.6-0.8	Herencia de padres élite
+Se observan rutas generadas a partir de las soluciones halladas. Las soluciones se evalúan en términos de distancia total recorrida y cumplimiento de restricciones.
 
-## Validación 
+## 🔗 Referencias
 
-validation_checks = {
-    'capacity': lambda r: r['load'] <= MAX_LOAD,
-    'time_windows': check_time_windows,
-    'depot_usage': validate_depot_assignments,
-    'coverage': full_customer_coverage
-}
+- Prins, C. (2004). A simple and effective evolutionary algorithm for the vehicle routing problem. *Computers & Operations Research*.
+- Montané, F. A. T., & Galvão, R. D. (2006). A tabu search algorithm for the vehicle routing problem with simultaneous pick-up and delivery service. *Computers & Operations Research*.
 
-[VALIDACIÓN] p01.txt 
---------------------------------------------------
-• Distancia total: 1456.78 km
-• Vehículos utilizados: 4/4
-• Tiempo ejecución: 2m 45s
-• Violaciones detectadas:
-  - Capacidad: 0
-  - Ventanas de tiempo: 2 (clientes 15, 27)
-  - Cobertura: 100% (50/50 clientes)
+## 📝 Licencia
 
-## Resultados
-
-
-  Instancia  | Depósitos | Clientes | Vehículos | Tiempo(s) | Distancia Total
-  --------------------------------------------------------------------------
-  p01.txt    |     4     |    50    |     4     |  152.34   |    1256.78
+Este proyecto se distribuye bajo la Licencia MIT. Consulta el archivo `LICENSE` para más información.

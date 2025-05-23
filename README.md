@@ -1,194 +1,140 @@
-================================================================================
-MDVRP SOLVER WITH BRKGA - DOCUMENTACIÓN COMPLETA
-================================================================================
+# 🚚 MDVRP Solver con BRKGA ![Python](https://img.shields.io/badge/Python-3.7%2B-blue) [![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-1. DESCRIPCIÓN DEL PROYECTO
---------------------------------------------------------------------------------
-Implementación de un solucionador para el Problema de Ruteo de Vehículos con 
-Múltiples Depósitos (MDVRP) utilizando un Algoritmo Genético con Claves Aleatorias
-Sesgadas (BRKGA). El proyecto incluye:
+![Visualización de Rutas MDVRP](docs/route_visualization.png)
 
-- Parser para archivos de instancia MDVRP estándar
-- Visualización avanzada de problemas y soluciones
-- Algoritmo de optimización BRKGA altamente configurable
-- Sistema de validación de soluciones
-- Herramientas para ajuste de hiperparámetros
-- Soporte para ejecución batch en múltiples instancias
+## 📦 Tabla de Contenidos
+1. [Descripción del Proyecto](#-descripción-del-proyecto)  
+2. [Características Clave](#-características-clave)  
+3. [Instalación](#-instalación)  
+4. [Uso Rápido](#-uso-rápido)  
+5. [Estructura del Proyecto](#-estructura-del-proyecto)  
+6. [Configuración Avanzada](#-configuración-avanzada)  
+7. [Hiperparámetros](#-hiperparámetros)  
+8. [Validación](#-validación)  
+9. [Resultados](#-resultados)  
 
-2. ESTRUCTURA DE ARCHIVOS DE INSTANCIA
---------------------------------------------------------------------------------
-Formato estándar para archivos .txt:
+<a name="descripción"></a>
+## Descripción del Proyecto
 
-Línea 1: 
-<problem_type> <num_vehicles> <num_customers> <num_depots>
+Solución evolutiva para el **Problema de Ruteo de Vehículos con Múltiples Depósitos** que combina:
+- Algoritmo Genético con Claves Aleatorias Sesgadas (BRKGA)
+- Sistema de visualización 
+- Parser para instancias MDVRP
+- Módulo de validación
+- Búsqueda de hipérparametros
 
-Líneas 2-(num_depots+1): 
-<max_duration> <max_load> (Especificaciones por vehículo)
+## Instalación 
 
-Líneas restantes (clientes):
-<id> <x> <y> <service_duration> <demand> <frequency> <num_visit_combinations>
-<visit_combinations> [time_window_start] [time_window_end]
+git clone [https://github.com/tu_usuario/mdvrp-solver.git](https://github.com/samuelromeroy/BRKGA-applied-to-MDVRP/edit/main/README.md)
+cd mdvrp-solver 
 
-Ejemplo detallado:
-1 4 50 4       # Problema tipo 1, 4 vehículos, 50 clientes, 4 depósitos
-200 100        # Vehículo 1: Duración máxima 200, Carga 100
-...            # (3 líneas más de especificaciones de vehículos)
-5 12 45 30 15 2 3 1 4 2 0 50  # Cliente ID 5 en (12,45), servicio 30u.t., demanda 15
-...
+Dependencias: 
 
-Características especiales:
-- Los depósitos se identifican por demanda=0 y frecuencia=0
-- Las ventanas de tiempo son opcionales
-- Combinaciones de visita permiten múltiples patrones de servicio
+NumPy	1.21+
+Matplotlib	3.5+	
 
-3. COMPONENTES PRINCIPALES DEL CÓDIGO
---------------------------------------------------------------------------------
-3.1 Parser MDVRP (parse_mdvrp_file)
------------------------------------
-Función: Convierte archivos .txt en estructura de datos Python
-Entrada: Ruta de archivo .txt
-Salida: Diccionario estructurado con:
-- Metadatos del problema
-- Lista de depósitos con coordenadas
-- Lista de clientes con 15 atributos detallados
-- Especificaciones técnicas de vehículos
+## Uso Rápido 
 
-3.2 Sistema de Visualización
-----------------------------
-Funciones principales:
-- plot_mdvrp_instance: Mapa 2D interactivo con:
-  * Depósitos como cuadrados rojos
-  * Clientes escalados por demanda
-  * Etiquetas de ventanas de tiempo
-  * Sistema de coordenadas ajustable
-
-- visualize_routes: Visualización avanzada de soluciones:
-  * Rutas multicolor con números de orden
-  * Información flotante por ruta
-  * Leyenda interactiva
-  * Resumen de métricas globales
-
-3.3 Implementación BRKGA (BRKGA_MDVRP)
----------------------------------------
-Clase principal con métodos:
-- Constructor: Configura parámetros del algoritmo
-- decode: Transforma cromosomas en rutas válidas
-- fitness: Función de evaluación con penalizaciones
-- evolve: Mecanismo de evolución generacional
-- solve: Loop principal de optimización
-
-Parámetros clave del algoritmo:
-- Tamaño poblacional: 100-2000 individuos
-- Porcentaje de élite: 10-40%
-- Tasa de mutación: 5-20%
-- Generaciones: 50-1000 iteraciones
-
-3.4 Validador de Soluciones (debug_solution)
---------------------------------------------
-Sistema de verificación que chequea:
-- Cumplimiento de capacidades vehiculares
-- Respeto de ventanas de tiempo
-- Cobertura completa de clientes
-- Uso correcto de depósitos
-- Consistencia de datos
-
-Salida detallada:
-- Reporte por ruta con métricas
-- Detección de violaciones específicas
-- Resumen general de validez
-
-4. LIBRERÍAS Y DEPENDENCIAS
---------------------------------------------------------------------------------
-Requisitos mínimos:
-- Python 3.7+
-- Numpy 1.21+ (Manejo de matrices y operaciones vectorizadas)
-- Matplotlib 3.5+ (Visualización 2D avanzada)
-
-Requisitos opcionales:
-- tqdm (Para barras de progreso en ejecuciones largas)
-- pandas (Análisis de resultados y métricas)
-
-Instalación completa:
-pip install numpy matplotlib tqdm pandas
-
-5. USO BÁSICO
---------------------------------------------------------------------------------
-Ejemplo mínimo funcional:
-
-# Carga de datos
-from mdvrp_solver import parse_mdvrp_file, BRKGA_MDVRP, visualize_routes
-
-data = parse_mdvrp_file('p01.txt')
-
-# Configuración del solver
-solver = BRKGA_MDVRP(
-    data,
-    population_size=1000,
-    elite_percent=0.2,
-    mutants_percent=0.1
+from mdvrp_solver import (
+    parse_mdvrp_file,
+    BRKGA_MDVRP,
+    visualize_routes,
+    debug_solution
 )
 
-# Optimización
-solution, distance, history = solver.solve(generations=100)
+# 1. Cargar instancia
+data = parse_mdvrp_file('instances/p01.txt')
 
-# Visualización
-visualize_routes(data, solution)
+# 2. Configurar algoritmo
+solver = BRKGA_MDVRP(
+    data,
+    population_size=1500,
+    elite_percent=0.3,
+    mutants_percent=0.1,
+    p_bias=0.7
+)
 
-# Validación
-debug_solution(data, solution, verbose=True)
+# 3. Ejecutar optimización
+solution, distance, history = solver.solve(
+    generations=500,
+    verbose=True
+)
 
-6. AJUSTE DE HIPERPARÁMETROS
---------------------------------------------------------------------------------
-Sistema incluido para optimización de parámetros:
-- Búsqueda grid automatizada
-- Comparación de convergencias
-- Análisis tiempo-calidad
-- Generación de gráficos comparativos
+# 4. Visualizar resultados
+visualize_routes(
+    data, 
+    solution,
+    show_demand=True,
+    save_path='results/p01_solution.png'
+)
 
-Ejecución:
-python hyperparameter_tuning.py
+# 5. Validar solución
+is_valid, violations = debug_solution(data, solution)
 
-Archivos de configuración:
-- hyperparameter_grid.json: Define espacios de búsqueda
-- instances.list: Listado de instancias a evaluar
+## Estructura del proyecto 
 
-7. EJECUCIÓN EN MÚLTIPLES INSTANCIAS
---------------------------------------------------------------------------------
-Script incluido para procesamiento batch:
-- Procesa secuencialmente p01.txt a p23.txt
-- Genera reporte consolidado en .txt
-- Formato de salida:
+mdvrp-solver/
+├── instances/          # Archivos de entrada (.txt)
+├── src/                # Código fuente
+│   ├── core/           # Lógica principal
+│   ├── utils/          # Herramientas auxiliares
+│   └── visualization/  # Módulos gráficos
+├── results/            # Salidas generadas
+│   ├── convergence/    # Gráficas de convergencia
+│   └── solutions/      # Archivos de solución
+├── experiments/        # Scripts de experimentación
+├── docs/               # Documentación técnica
+└── tests/              # Casos de prueba
+
+## Configuración avanzada
+
+brkga:
+  population_size: 1200
+  elite_percent: 0.25
+  mutants_percent: 0.15
+  p_bias: 0.65
   
+visualization:
+  node_size: 150
+  route_width: 2.5
+  show_time_windows: true
+  
+output:
+  save_plots: true
+  plot_format: png
+  report_format: txt
+
+  ## Hipérparametros 
+  
+Parámetro	Valor Óptimo	Rango Recomendado	Efecto Principal
+Tamaño Población	1500	500-2000	Diversidad genética
+Porcentaje Élite	30%	20%-40%	Explotación de soluciones
+Tasa de Mutación	10%	5%-15%	Exploración del espacio
+Generaciones	500	100-1000	Balance tiempo-calidad
+p_bias	0.7	0.6-0.8	Herencia de padres élite
+
+## Validación 
+
+validation_checks = {
+    'capacity': lambda r: r['load'] <= MAX_LOAD,
+    'time_windows': check_time_windows,
+    'depot_usage': validate_depot_assignments,
+    'coverage': full_customer_coverage
+}
+
+[VALIDACIÓN] p01.txt 
+--------------------------------------------------
+• Distancia total: 1456.78 km
+• Vehículos utilizados: 4/4
+• Tiempo ejecución: 2m 45s
+• Violaciones detectadas:
+  - Capacidad: 0
+  - Ventanas de tiempo: 2 (clientes 15, 27)
+  - Cobertura: 100% (50/50 clientes)
+
+## Resultados
+
+
   Instancia  | Depósitos | Clientes | Vehículos | Tiempo(s) | Distancia Total
   --------------------------------------------------------------------------
   p01.txt    |     4     |    50    |     4     |  152.34   |    1256.78
-
-Ejecución:
-python batch_processor.py
-
-8. RESULTADOS Y VALIDACIÓN
---------------------------------------------------------------------------------
-Archivos de salida generados:
-- resultados_instancias_completos.txt: Métricas principales
-- convergence_plots/: Gráficos de convergencia por instancia
-- solution_logs/: Detalles completos de mejores soluciones
-- validation_reports/: Informes de validación detallados
-
-9. LICENCIA Y REFERENCIAS
---------------------------------------------------------------------------------
-Licencia MIT - Ver LICENSE para detalles completos
-
-Referencias clave:
-- Primer artículo sobre BRKGA: Gonçalves y Resende (2011)
-- Instancias MDVRP estándar: Cordeau et al. (1997)
-- Modelos de ventanas de tiempo: Solomon (1987)
-
-10. CONTACTO Y SOPORTE
---------------------------------------------------------------------------------
-Autores: [Tu Nombre]
-Mantenimiento: [Tu Email]
-Repositorio: [URL del Repositorio]
-Reporte de errores: [Issues URL]
-
-
-

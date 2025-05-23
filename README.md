@@ -16,16 +16,20 @@ Este proyecto implementa un algoritmo BRKGA (Biased Random-Key Genetic Algorithm
 ## Estructura de la instancia 
 
 Línea 1: 
+
 <problem_type> <num_vehicles> <num_customers> <num_depots>
 
 Líneas 2-(num_depots+1): 
 <max_duration> <max_load> (Especificaciones por vehículo)
 
 Líneas restantes (clientes):
+
 <id> <x> <y> <service_duration> <demand> <frequency> <num_visit_combinations>
 <visit_combinations> [time_window_start] [time_window_end]
 
 Ejemplo detallado:
+
+
 1 4 50 4       # Problema tipo 1, 4 vehículos, 50 clientes, 4 depósitos
 200 100        # Vehículo 1: Duración máxima 200, Carga 100
 ...            # (3 líneas más de especificaciones de vehículos)
@@ -33,6 +37,7 @@ Ejemplo detallado:
 ...
 
 Características especiales:
+
 - Los depósitos se identifican por demanda=0 y frecuencia=0
 - Las ventanas de tiempo son opcionales
   

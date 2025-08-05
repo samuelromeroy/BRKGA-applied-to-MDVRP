@@ -1,76 +1,58 @@
-# BRKGA para MDVRP
+BRKGA for MDVRP
 
-## 📌 Descripción del Proyecto
+Project Description
+This project implements a variant of the BRKGA (Biased Random-Key Genetic Algorithm) algorithm to solve the Multi-Depot Vehicle Routing Problem (MDVRP). The MDVRP is an extension of the classic VRP where multiple depots can dispatch vehicles to satisfy customer demand while respecting capacity and duration constraints.
 
-Este proyecto implementa una variante del algoritmo BRKGA (Biased Random-Key Genetic Algorithm) para resolver el problema del Enrutamiento de Vehículos con Múltiples Depósitos (MDVRP). El MDVRP es una extensión del VRP clásico en el que varios depósitos pueden despachar vehículos para satisfacer la demanda de clientes, respetando restricciones de capacidad y duración.
+Key Features
+- Structured reading of MDVRP instances from text files.
+- Visualization of customers and depots with optional information about demand and time windows.
+- Application of an algorithm based on random-key representation to search for feasible solutions.
 
-## ✨ Características Clave
-
-- Lectura estructurada de instancias MDVRP desde archivos de texto.
-- Visualización de clientes y depósitos con información opcional sobre demanda y ventanas de tiempo.
-- Aplicación de un algoritmo basado en representación de claves aleatorias para buscar soluciones factibles.
-
-## ⚙️ Instalación
-
-1. Clona este repositorio:
-   ```bash
+Installation
+1. Clone this repository:
    git clone https://github.com/samuelromeroy/BRKGA-applied-to-MDVRP
-   ```
-
-2. Instala las dependencias necesarias:
-   ```bash
+2. Install the necessary dependencies:
    pip install numpy matplotlib
-   ```
 
-## 🚀 Uso Rápido
+Quick Start
+1. Place the instance file (.txt) in the root directory.
+2. Run the notebook BRKGA.ipynb.
+3. Adjust the file_path parameter with your instance file name.
+4. Run the cells to load data, visualize the instance, and execute the algorithm.
 
-1. Coloca el archivo de instancia (`.txt`) en el directorio raíz.
-2. Ejecuta el notebook `BRKGA.ipynb`.
-3. Ajusta el parámetro `file_path` con el nombre de tu archivo de instancia.
-4. Corre las celdas para cargar datos, visualizar la instancia y ejecutar el algoritmo.
-
-## 🧱 Estructura del Proyecto
-
-```
+Project Structure
 .
-├── BRKGA.ipynb              # Notebook principal con implementación y visualización
-├── data/                    # (Opcional) Carpeta para almacenar archivos de instancia
-├── README.md                # Este archivo
-└── requirements.txt         # Lista de dependencias
-```
+├── BRKGA.ipynb              # Main notebook with implementation and visualization
+├── data/                    # (Optional) Folder to store instance files
+├── README.md                # This file
+└── requirements.txt         # Dependencies list
 
-## 🛠️ Configuración Avanzada
+Advanced Configuration
+You can modify the algorithm's behavior by adjusting:
+- Population size
+- Elite and mutant percentages
+- Stopping criteria
+- Evaluation metrics
 
-Puedes modificar el comportamiento del algoritmo ajustando:
-- Tamaño de población
-- Porcentaje de élite y mutantes
-- Criterios de parada
-- Métricas de evaluación
+These configurations are found in the notebook body.
 
-Estas configuraciones se encuentran en el cuerpo del notebook.
+Hyperparameters
+The main BRKGA hyperparameters include:
+- population_size: population size
+- elite_fraction: fraction of population considered elite
+- mutant_fraction: fraction of mutants per generation
+- inheritance_prob: probability of inheritance from elite parent
+- max_generations: maximum number of generations
 
-## ⚙️ Hiperparámetros
+Validation
+The algorithm is validated graphically through visualization of customers and routes, and quantitatively through the objective function value. Performance can also be compared across different instances.
 
-Los principales hiperparámetros del BRKGA incluyen:
-- `population_size`: tamaño de la población
-- `elite_fraction`: fracción de la población considerada élite
-- `mutant_fraction`: fracción de mutantes por generación
-- `inheritance_prob`: probabilidad de herencia del padre élite
-- `max_generations`: número máximo de generaciones
+Results
+Routes generated from the found solutions are observed. Solutions are evaluated in terms of total distance traveled and constraint compliance.
 
-## ✅ Validación
+References
+- Prins, C. (2004). A simple and effective evolutionary algorithm for the vehicle routing problem. Computers & Operations Research.
+- Montané, F. A. T., & Galvão, R. D. (2006). A tabu search algorithm for the vehicle routing problem with simultaneous pick-up and delivery service. Computers & Operations Research.
 
-El algoritmo se valida gráficamente mediante visualización de los clientes y rutas, y cuantitativamente a través del valor de la función objetivo. También se puede comparar el desempeño en diferentes instancias.
-
-## 📊 Resultados
-
-Se observan rutas generadas a partir de las soluciones halladas. Las soluciones se evalúan en términos de distancia total recorrida y cumplimiento de restricciones.
-
-## 🔗 Referencias
-
-- Prins, C. (2004). A simple and effective evolutionary algorithm for the vehicle routing problem. *Computers & Operations Research*.
-- Montané, F. A. T., & Galvão, R. D. (2006). A tabu search algorithm for the vehicle routing problem with simultaneous pick-up and delivery service. *Computers & Operations Research*.
-
-## 📝 Licencia
-
-Este proyecto se distribuye bajo la Licencia MIT. Consulta el archivo `LICENSE` para más información.
+License
+This project is distributed under the MIT License. See the LICENSE file for more information.
